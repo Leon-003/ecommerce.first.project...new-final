@@ -82,7 +82,7 @@
                         </div>
                         <h4>TK.220</h4>
                     </div>
-                    <input type="submit" class="normal" value="add to cart" name="add_to_cart">
+                    <button class="normal"> Add to cart</button>
                 </div>
 
 
