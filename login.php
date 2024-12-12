@@ -56,7 +56,7 @@
            <div>
                <ul id="navbar">
                  <li><a href="index.php">Home</a></li>
-                 <li><a href="shop.php">Shop</a></li>
+                 <li><a href="product.php">Products</a></li>
                  <li><a href="about.php">About</a></li>
                  <li><a href="contact.php">Contact</a></li>
                  <li id="lg-bag"><a href="cart.php"><i class="far fa-shopping-cart"></i></a></li>

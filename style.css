@@ -545,7 +545,7 @@ footer .follow{
 footer .follow i{
     color: #465b52;
     padding-right:4px;
-    coursor:pointer;
+    cursor:pointer;
 }
 
 footer .install .row img{
@@ -876,6 +876,8 @@ footer .copyright{
     justify-content: space-between;
 }
 
+
+
 #coupon{
     width: 50%;
     margin-bottom: 30px;
@@ -996,7 +998,17 @@ footer .copyright{
     text-align: center;
 }
 
-/*register*/
+/*products*/
+
+#headingg{
+    text-align: center;
+    font-size: 3.5rem;
+    text-transform: uppercase;
+    color:var(--black);
+    margin-bottom: 2rem;
+}
+
+/*checkout*/
 
 
 

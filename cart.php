@@ -1,3 +1,19 @@
+<?php
+    @include 'config.php';
+    if(isset($_POST['update_update_btn'])){  
+        $update_value=$_POST['update_quantity'];
+        $update_id=$_POST['update_quantity_id'];
+        $update_quantity_query=mysqli_query($conn,"UPDATE `cart` SET quantity = '$update_value' WHERE p_id='$update_id'");
+        if($update_quantity_query){
+            header('location:cart.php');
+        };
+    };
+    if(isset($_GET['remove'])){
+        $remove_id=$_GET['remove'];
+        mysqli_query($conn,"DELETE FROM `cart` WHERE p_id='$remove_id'");
+        header('location:cart.php');
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -15,7 +31,7 @@
            <div>
                <ul id="navbar">
                  <li><a href="index.php">Home</a></li>
-                 <li><a href="shop.php">Shop</a></li>
+                 <li><a href="product.php">Products </a></li>
                  <li><a href="about.php">About</a></li>
                  <li><a href="contact.php">Contact</a></li>
                  <li id="lg-bag"><a class="active" href="cart.php"><i class="far fa-shopping-cart"></i></a></li>
@@ -37,39 +53,43 @@
             <table width="100%">
                 <thead>
                     <tr>
-                        <td>Remove</td>
                         <td>Image</td>
                         <td>Product</td>
                         <td>Price</td>
                         <td>Quantity</td>
                         <td>Subtotal</td>
+                        <td>Action</td>
                     </tr>
                 </thead>
                 <tbody>
+                    <?php
+                    $select_cart=mysqli_query($conn,"SELECT* FROM `cart`");
+                    $grand_total=0;
+                    if(mysqli_num_rows($select_cart)>0){
+                        while($fetch_cart=mysqli_fetch_assoc($select_cart)){
+                       ?>
+                       <tr>
+                         <td><img src="img/products/<?php echo $fetch_cart['image']; ?>" alt=""></td>
+                         <td><?php echo $fetch_cart['name'];?></td>
+                         <td>TK.<?php echo number_format($fetch_cart['price']);?> </td>
+                         <td>
+                            <form action="" method="POST">
+                                 <input type="hidden" name="update_quantity_id" value="<?php echo $fetch_cart['p_id'];?>">
+                                 <input type="number"  name="update_quantity" min="1" value="<?php echo $fetch_cart['quantity'];?>">
+                                 <input type="submit" value="update" name="update_update_btn">
+
+                            </form>
+                        </td>
+                         <td><?php echo $sub_total=number_format($fetch_cart['price']*$fetch_cart['quantity']);?></td>
+                         <td><a href="cart.php? remove=<?php echo $fetch_cart['p_id'];?>" onclick="return confirm('remove item from cart?')" class="delete-btn"><i class="fas fa-trash"></i>Remove</a></td>
+                       </tr>
+                       <?php
+                        $grand_total+=$sub_total;
+                        };
+                    };
+                    ?>
                     <tr>
-                        <td><a href="#"><i class="far fa-times-circle"></i></a></td>
-                        <td><img src="img/products/noodles2.jfif" alt=""></td>
-                        <td>Mr Noodles</td>
-                        <td>TK.140</td>
-                        <td><input type="number" value="1"></td>
-                        <td>TK.140</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#"><i class="far fa-times-circle"></i></a></td>
-                        <td><img src="img/products/chocolate.jfif" alt=""></td>
-                        <td>Chocolate</td>
-                        <td>TK.100</td>
-                        <td><input type="number" value="1"></td>
-                        <td>TK.100</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#"><i class="far fa-times-circle"></i></a></td>
-                        <td><img src="img/products/pasta.jfif" alt=""></td>
-                        <td>Pasta</td>
-                        <td>TK.250</td>
-                        <td><input type="number" value="1"></td>
-                        <td>TK.250</td>
-                    </tr>
+                    
                 </tbody>
             </table>
         </section>
@@ -86,7 +106,7 @@
                     <table>
                         <tr>
                             <td>Cart Subtotal</td>
-                            <td>TK.490</td>
+                            <td>TK.<?php echo $grand_total;?></td>
                         </tr>
                         <tr>
                             <td>Shipping</td>
@@ -94,12 +114,24 @@
                         </tr>
                         <tr>
                             <td><strong>Total</strong></td>
-                            <td><strong>TK.490</strong></td>
+                            <td><strong>TK.<?php echo $grand_total;?></strong></td>
                         </tr>
 
                     </table>
-                    <button class="normal">Proceed to checkout</button>
+                    <button class="normal"><a href="checkout.php" class="btn <?=($grand_total >1)?'':'disabled';?>">Proceed to checkout</a></button>
             </div>
+        </section>
+        <section id="newsletter" class="section-p1 section-m1">
+            <div class="newstext">
+                <h4>Sign Up For Newsletters</h4>
+                <p>Get E-mail updates about our latest shop and <span>special offers</span></p>
+            </div>
+            <div class="form">
+                <input type="text" placeholder="Your Email Address">
+                <button class="normal">Sign Up</button>
+
+            </div>
+
         </section>
         <footer class="section-p1">
             <div class="col">
@@ -157,6 +189,6 @@
             </div>   
 
         </footer>
-        <script src="script.js"></script>
+        
     </body>
 </html>
